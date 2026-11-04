@@ -1,5 +1,8 @@
 [project]
 name = "terminal-pet-test"
 version = "0.1.0"
+description = "날씨 API를 적용한 터미널 애완동물 키우기 게임"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "requests>=2.34.2",
+]
