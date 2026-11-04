@@ -41,8 +41,9 @@ uv run terminal_pet_test.py
 |`api-plan.md`|API 적용 기획안|
 |`pyproject.toml`|프로젝트 정보와 의존성(`requests`) 선언|
 |`uv.lock`|의존성의 정확한 버전 고정 (재현성 보장)|
+|`.python-version`|Python 버전 고정 (3.12)|
 |`ai-chat.md`|개발 과정에서 AI와 나눈 대화 원문|
-|`공컴프 과제 기획안 1 (1).md`|5주차 게임 기획안|
+|`week5-plan.md`|5주차 게임 기획안|
 |`chat.md`, `대화내용.md`|5주차 개발 과정에서 AI와 나눈 대화 원문|
 |`.gitignore`|`.venv/`, `__pycache__/`, `pet_save.json`, `.env`를 Git에서 제외|
 
