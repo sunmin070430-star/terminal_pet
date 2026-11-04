@@ -3,6 +3,8 @@ import os
 import random
 import time
 
+from weather import get_weather
+
 SAVE_FILE = "pet_save.json"
 
 
@@ -94,6 +96,21 @@ class Pet:
         self.mood -= 2
         self.clamp_stats()
 
+    def apply_weather(self, weather):
+        """날씨에 따라 기분을 바꾸고 한마디를 보여 준다"""
+        if weather == "맑음":
+            self.mood += 5
+            print(f"\n☀️  햇살이 좋아요! {self.name}가 신나서 꼬리를 흔들어요. (기분 +5)")
+        elif weather == "비":
+            self.mood -= 5
+            print(f"\n🌧️  밖에 비가 와요. {self.name}가 창밖만 보고 있어요. (기분 -5)")
+        elif weather == "눈":
+            self.mood -= 5
+            print(f"\n❄️  밖에 눈이 와요. {self.name}가 추워서 몸을 웅크렸어요. (기분 -5)")
+        else:
+            print(f"\n☁️  하늘이 흐려요. {self.name}가 조용히 쉬고 있어요.")
+        self.clamp_stats()
+
     def get_face(self):
         """상태에 따른 표정 반환 (좋음 ^.^, 보통 o.o, 나쁨 T.T)"""
         avg = (self.hunger + self.mood + self.energy) / 3
@@ -101,8 +118,8 @@ class Pet:
             return "T.T"
         return "^.^" if avg >= 70 else "o.o"
 
-    def print_status(self):
-        """ASCII 표정 및 상태 막대 표시"""
+    def print_status(self, weather_text=None):
+        """ASCII 표정 및 상태 막대 표시 (날씨 정보가 있으면 맨 위에 표시)"""
         face = self.get_face()
         art = f"  /^ ^\\\n ( {face} )\n  ∪   ∪ " if self.species == "강아지" else f"  /\\_/\\\n ( {face} )\n  > ^ < "
 
@@ -110,7 +127,10 @@ class Pet:
             filled = val // 10
             return f"[{'■' * filled}{'□' * (10 - filled)}] {val:>3}/100"
 
-        print("\n" + "=" * 36 + f"\n[{self.species}] {self.name}\n{art}\n" + "-" * 36)
+        print("\n" + "=" * 36)
+        if weather_text:
+            print(weather_text)
+        print(f"[{self.species}] {self.name}\n{art}\n" + "-" * 36)
         print(f"배부름: {bar(self.hunger)}\n기  분: {bar(self.mood)}\n체  력: {bar(self.energy)}")
         print("-" * 36)
 
@@ -170,8 +190,16 @@ def main():
         pet = create_new_pet()
         save_pet(pet)
 
+    weather_info = get_weather()  # 게임 시작 시 한 번만 호출
+    if weather_info is None:
+        print("\n[안내] 날씨를 불러오지 못했어요. 날씨 효과 없이 진행합니다.")
+        weather_text = None
+    else:
+        pet.apply_weather(weather_info["weather"])
+        weather_text = f"오늘 날씨: {weather_info['weather']} {weather_info['temperature']}°C"
+
     while True:
-        pet.print_status()
+        pet.print_status(weather_text)
         print("1. 밥 주기\n2. 놀아 주기 (가위바위보)\n3. 재우기\n4. 저장하고 종료")
         cmd = input("행동을 선택하세요 (1~4): ").strip()
 
@@ -193,7 +221,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
