@@ -1,3 +1,4 @@
 .venv/
 __pycache__/
 pet_save.json
+.env
